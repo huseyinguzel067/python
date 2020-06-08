@@ -1,0 +1,30 @@
+def ping(host, port, results = None):
+    try:
+        socket.socket().connect((host, port))
+        if results is not None:
+            results.append(port)
+        print(host  +str(port) + " Open")
+        return True
+    except:
+        return False
+
+def scan_ports(host):
+    available_ports = []
+    socket.setdefaulttimeout(CONNECTION_TIMEOUT)
+    with ThreadPoolExecutor(max_workers = THREADS) as executor:
+        print("\nScanning ports on " + host + " ...")
+        for port in range(1, 1000):
+            executor.submit(ping, host, port, available_ports)
+    print("\nDone.")
+    available_ports.sort()
+    print(str(len(available_ports)) + " ports available.")
+    print(available_ports)
+
+def main():
+    for a in range(10,22):
+        ip="192.168.31."+str(a)
+        scan_ports(ip)
+        print(ip)
+
+if __name__ == "__main__":
+    main()

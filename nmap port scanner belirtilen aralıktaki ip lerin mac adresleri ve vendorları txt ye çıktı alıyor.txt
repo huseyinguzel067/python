@@ -1,0 +1,14 @@
+import nmap
+import json
+
+nm = nmap.PortScanner()
+nm.scan('192.168.31.1/24',arguments='-O') #Note that I tested with -sP to save time
+output = []
+with open('output.txt', 'a') as outfile:
+  for h in nm.all_hosts():
+    if 'mac' in nm[h]['addresses']:
+      item = nm[h]['addresses']
+      if nm[h]['vendor'].values():
+        item['vendor'] = list(nm[h]['vendor'].values())[0]
+      output.append(item)
+  json.dump(output, outfile)

@@ -1,0 +1,18 @@
+import paramiko
+ssh=paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+ssh.connect("127.0.0.1",port=22,username="admin",password="***")
+stdin,stdout,stderr=ssh.exec_command("show ip adress")
+
+stdin.write("1.1.1.1")
+stdin.write("\n")
+stdin.flush()
+stdin.write("source_test.txt")
+stdin.write("\n")
+stdin.flush()
+stdin.write("dest_test.txt")
+stdin.write("\n")
+
+output=stdout.readlines()
+print("\n".join(output))
+ssh.close()
